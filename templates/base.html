@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="es-EC">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ page.title }}</title>
+<meta name="description" content="{{ page.description }}">
+<link rel="canonical" href="{{ canonical }}">
+<meta name="robots" content="{{ robots }}">
+<meta name="theme-color" content="#FFD100">
+<meta name="google-site-verification" content="{{ gsc }}">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+<link rel="apple-touch-icon" href="/assets/logo-270.png">
+<meta property="og:locale" content="es_EC">
+<meta property="og:type" content="{{ 'website' if is_home else 'article' }}">
+<meta property="og:site_name" content="{{ site_name }}">
+<meta property="og:title" content="{{ page.title }}">
+<meta property="og:description" content="{{ page.description }}">
+<meta property="og:url" content="{{ canonical }}">
+<meta property="og:image" content="{{ og_image }}">
+<meta name="twitter:card" content="summary_large_image">
+{% if has_fonts %}<link rel="preload" href="/assets/fonts/poppins-400.woff2" as="font" type="font/woff2" crossorigin>{% endif %}
+<link rel="stylesheet" href="/assets/style.css">
+{% if ads %}<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={{ client }}" crossorigin="anonymous"></script>{% endif %}
+<script async src="https://www.googletagmanager.com/gtag/js?id={{ ga4 }}"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','{{ ga4 }}');</script>
+<script type="application/ld+json">{{ jsonld|safe }}</script>
+</head>
+<body class="{{ 'home' if is_home else 'inner' }}">
+<a class="skip" href="#main">Saltar al contenido</a>
+<div class="aviso-top">Sitio informativo independiente, <strong>no oficial</strong>. Los trámites y pagos se hacen en los portales oficiales.</div>
+<header class="site-header">
+  <div class="wrap header-in">
+    <a class="brand" href="/" aria-label="{{ site_name }}: inicio">
+      <img src="/assets/logo.png" alt="Matriculación Vehicular" width="160" height="48">
+    </a>
+    <input type="checkbox" id="menu-toggle" class="menu-toggle" aria-label="Abrir menú">
+    <label for="menu-toggle" class="menu-btn" aria-hidden="true">Menú</label>
+    <nav class="main-nav" aria-label="Principal">
+      <ul>{% for t, u in nav %}<li><a href="{{ u }}"{% if u == '/' ~ slug ~ '/' %} aria-current="page"{% endif %}>{{ t }}</a></li>{% endfor %}</ul>
+    </nav>
+  </div>
+</header>
+
+{% if is_home %}
+<section class="hero">
+  <div class="wrap">
+    <h1>{{ page.h1 }}</h1>
+    {% if page.lead %}<p class="lead">{{ page.lead }}</p>{% endif %}
+    {% if page.ctas %}<p class="cta-row">{% for c in page.ctas %}<a class="btn {{ 'btn-secondary' if c.style == 'secondary' else '' }}" href="{{ c.u }}">{{ c.t }}</a>{% endfor %}</p>{% endif %}
+  </div>
+</section>
+{% endif %}
+
+<main id="main" class="wrap content">
+  {% if not is_home %}
+  {% if crumbs|length > 1 %}
+  <nav class="crumbs" aria-label="Migas de pan"><ol>
+    {% for name, u in crumbs %}<li>{% if not loop.last %}<a href="{{ u }}">{{ name }}</a>{% else %}<span aria-current="page">{{ name }}</span>{% endif %}</li>{% endfor %}
+  </ol></nav>
+  {% endif %}
+  <h1>{{ page.h1 }}</h1>
+  {% if page.type not in ['confianza'] or page.show_date %}<p class="meta">Actualizado: <time datetime="{{ updated }}">{{ updated }}</time> · Sitio informativo no oficial</p>{% endif %}
+  {% endif %}
+
+  {% if page.quick %}<div class="respuesta"><strong>Respuesta rápida:</strong> {{ page.quick }}</div>{% endif %}
+
+  <article class="prose">
+  {{ body|safe }}
+  </article>
+
+  {% if faq %}
+  <section class="faq" aria-labelledby="faq-h"><h2 id="faq-h">Preguntas frecuentes</h2>
+    {% for f in faq %}<details><summary>{{ f.q }}</summary><div>{{ f.a_html|safe }}</div></details>{% endfor %}
+  </section>
+  {% endif %}
+
+  {% if sources %}
+  <section class="fuentes"><h2>Fuentes oficiales y de referencia</h2>
+    <ul>{% for s in sources %}<li><a href="{{ s.u }}" rel="noopener" target="_blank">{{ s.t }}</a></li>{% endfor %}</ul>
+    <p class="small">Los datos de dinero, plazos y normas pueden cambiar. Confírmalos siempre en el portal oficial antes de pagar o tramitar.</p>
+  </section>
+  {% endif %}
+
+  {% if related %}
+  <section class="related"><h2>Sigue leyendo</h2>
+    <ul class="cards">{% for r in related %}<li><a href="{{ r.url }}">{{ r.title }}</a></li>{% endfor %}</ul>
+  </section>
+  {% endif %}
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p><strong>{{ site_name }}</strong> es una guía informativa independiente. No pertenece al Gobierno de Ecuador, a la ANT, al SRI ni a ningún municipio.</p>
+    <ul class="footer-links">{% for t, u in footer %}<li><a href="{{ u }}">{{ t }}</a></li>{% endfor %}</ul>
+    <p class="small">© 2026 matriculacionvehicular.com · Información revisada cada mes con fuentes oficiales.</p>
+  </div>
+</footer>
+<script src="/assets/app.js" defer></script>
+</body>
+</html>
